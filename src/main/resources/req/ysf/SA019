@@ -1,0 +1,1 @@
+ {"version":"1.0","txnType":"SA019", "sendInsCode":"1", "queryId":"random(20)", "encryptData":"","cerVer":"1" ,"signature":"1","cerFile":"1","priAccNo":"${CARD_NO}", "subAccNo":"${SUB_ACCT_NO}","txnAmt":"1000","reqResvFld":""}

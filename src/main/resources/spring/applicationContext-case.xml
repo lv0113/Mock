@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    
+    <!--
+    	返回报文解析配置，用来解析返回报文中的响应码和响应信息，以及交易是否成功：自定义时需要实现ParseI接口。
+    	com.lvwza.consistent.CDResultParse为CD报文的结果解析实现
+    	<bean id="cdResultParse" name="CD返回报文解析实现" class="com.lvwza.consistent.CDResultParse"/>
+    	
+    	com.lvwza.consistent.FixResultParse为定长报文的结果解析实现。
+    	     retCodeIndex  响应码起始位置（不包括长度头）
+    	     retCodeLen    响应码长度
+    	     retMsgIndex   响应信息起始位置（不包括长度头）
+    	     retMsglen     响应信息长度（为0时表示没有响应信息）
+    	     retCodeSuccess 成功的响应码
+    	<bean id="FixResultParse" name="定长返回报文解析实现" class="com.lvwza.consistent.FixResultParse">
+	    	<property name="retCodeIndex" value="4" />
+	    	<property name="retCodeLen" value="6" />
+	    	<property name="retMsgIndex" value="0" />
+	    	<property name="retMsglen" value="0" />
+	    	<property name="retCodeSuccess" value="000000" />
+	    </bean>
+	    
+	    JSON报文解析实现：com.lvwza.consistent.JsonResultParse
+	    	retCodeName  响应码字段名，使用JSONPATH表示
+	    	retMsgName   响应信息字段名，使用JSONPATH表示
+	    	retCodeSuccess  成功的响应码
+	    <bean id="JsonResultParse" name="JSON返回报文解析实现" class="com.lvwza.consistent.JsonResultParse">
+	    	<property name="retCodeName" value="$txnType" />
+	    	<property name="retMsgName" value="$sendInsCode" />
+	    	<property name="retCodeSuccess" value="000000" />
+	    </bean>
+     -->
+    <bean id="cdResultParse" name="CD返回报文解析实现" class="com.lvwza.consistent.CDResultParse"/>
+    <bean id="JsonResultParse" name="JSON返回报文解析实现" class="com.lvwza.consistent.JsonResultParse">
+    	<property name="retCodeName" value="$txnType" />
+    	<property name="retMsgName" value="$sendInsCode" />
+    </bean>
+    <bean id="FixResultParse" name="定长返回报文解析实现" class="com.lvwza.consistent.FixResultParse">
+    	<property name="retCodeIndex" value="4" />
+    	<property name="retCodeLen" value="6" />
+    	<property name="retMsgIndex" value="0" />
+    	<property name="retMsglen" value="0" />
+    	<property name="retCodeSuccess" value="000000" />
+    </bean>
+    
+    
+    <!--
+    	测试场景配置：一个场景包括多个tran。可以一次发起测试。
+    	 测试url为：http://127.0.0.1:8080/web/tran?caseid=ysf
+    	id			为场景id，在请求url中使用。
+    	name  		场景说明
+    	parse		返回报文解析配置，使用上面的配置。
+    	trans		交易配置，配置该场景下的交易。交易在applicationContext-tran.xml中配置
+    	<bean id="ysf" name="云闪付" class="com.lvwza.consistent.CaseProcess">
+	    	<property name="parse" ref="FixResultParse"/> 
+	   		<property name="trans">
+	   			<list>
+	                <ref bean="tran_6611"/>
+	                <ref bean="tran2"/>
+	            </list>
+	   		</property>
+	    </bean>
+     -->
+    <bean id="ysf" name="云闪付" class="com.lvwza.consistent.CaseProcess">
+    	<property name="parse" ref="JsonResultParse"/> 
+   		<property name="trans">
+   			<list>
+                <ref bean="SA002"/>
+                <ref bean="SA007"/>
+                <ref bean="SA009"/>
+                <ref bean="SA019"/>
+                <ref bean="SA020"/>
+                <ref bean="SA021"/>
+            </list>
+   		</property>
+    </bean>
+
+	<bean id="tax" name="税银平台" class="com.lvwza.consistent.CaseProcess">
+    	<property name="parse" ref="cdResultParse"/> 
+   		<property name="trans">
+   			<list>
+                <ref bean="QueryCustInfo"/>
+                <ref bean="QueryFee"/>
+            </list>
+   		</property>
+    </bean>
+    
+</beans>

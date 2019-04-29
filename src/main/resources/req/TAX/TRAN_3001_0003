@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service>
+  <sys-header>
+    <data name="SYS_HEAD">
+      <struct>
+        <data name="MODULE_ID">
+          <field length="2" type="string">RB</field>
+        </data>
+        <data name="TRAN_TIMESTAMP">
+          <field length="9" type="string">170549277</field>
+        </data>
+        <data name="SOURCE_BRANCH_NO">
+          <field length="6" type="string">1000</field>
+        </data>
+        <data name="BRANCH_ID">
+          <field length="6" type="string">351001</field>
+        </data>
+        <data name="USER_LANG">
+          <field length="20" type="string">CHINESE</field>
+        </data>
+        <data name="SEQ_NO">
+          <field length="50" type="string">2035010100013605</field>
+        </data>
+        <data name="SOURCE_TYPE">
+          <field length="2" type="string">MT</field>
+        </data>
+        <data name="SERVER_ID">
+          <field length="30" type="string">127.0.0.1</field>
+        </data>
+        <data name="MESSAGE_CODE">
+          <field length="6" type="string">0003</field>
+        </data>
+        <data name="SERVICE_CODE">
+          <field length="30" type="string">SVR_BRANCHPLATFORM</field>
+        </data>
+        <data name="USER_ID">
+          <field length="30" type="string">JSCUPS</field>
+        </data>
+        <data name="PROGRAM_ID">
+          <field length="8" type="string">CD0209</field>
+        </data>
+        <data name="AUTH_FLAG">
+          <field length="1" type="string">N</field>
+        </data>
+        <data name="TRAN_TYPE">
+          <field length="4" type="string">0034</field>
+        </data>
+        <data name="DEST_BRANCH_NO">
+          <field length="6" type="string">1000</field>
+        </data>
+        <data name="TRAN_DATE">
+          <field length="8" type="string">20360921</field>
+        </data>
+        <data name="TRAN_MODE">
+          <field length="10" type="string">ONLINE</field>
+        </data>
+        <data name="MESSAGE_TYPE">
+          <field length="4" type="string">3001</field>
+        </data>
+        <data name="WS_ID">
+          <field length="30" type="string">001</field>
+        </data>
+      </struct>
+    </data>
+  </sys-header>
+  <body></body>
+</service>

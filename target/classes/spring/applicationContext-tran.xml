@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <!-- 加载资源配置文件 -->
+    <bean id="propertyConfigurerBusiConnector"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath*:config.properties</value>
+            </list>
+        </property>
+    </bean>
+    <!-- 
+    	通讯配置，自定义实现类需要实现AdapterI接口。
+    	tcp通讯实现类com.lvwza.consistent.TcpSend
+    	   参数：ip    对方ip地址
+    	     port  对方端口
+    	     timeout 超时时间，单位毫秒
+    	     encoding 对方报文字符集
+    	     headlen 报文头长度
+    	 <bean id="QPassTcp" name="云闪付闪付卡tcp协议" class="com.lvwza.consistent.TcpSend">
+	    	<property name="ip" value="10.17.1.165"/>
+	    	<property name="port" value="8429"/>
+	    	<property name="timeout" value="60000"/>
+	    	<property name="encoding" value="GBK"/>
+	    	<property name="headlen" value="4"/>
+	    </bean>
+    	     
+    	http通讯实现类com.lvwza.consistent.HttpSend
+    	参数： url    连接服务端的url地址
+    	    timeout  超时时间，单位毫秒
+    	    encoding 对方报文字符集
+    	    method   请求方法 post/get
+    	需要新增接出地址时，按照tcp协议还是http协议，新建bean节点。修改id和对应的参数。实现类使用现有的tcp和http实现类就可以。
+    	<bean id="http" name="http协议" class="com.lvwza.consistent.HttpSend">
+	    	<property name="url" value="http://f5-ncpaygw:8090/ncpay"/>
+	    	<property name="timeout" value="60000"/>
+	    	<property name="encoding" value="UTF-8"/>
+	    	<property name="method" value="post"/>
+	    </bean>
+     -->
+    <bean id="QPassTcp" name="云闪付闪付卡tcp协议" class="com.lvwza.consistent.TcpSend">
+    	<property name="ip" value="10.17.1.165"/>
+    	<property name="port" value="8429"/>
+    	<property name="timeout" value="60000"/>
+    	<property name="encoding" value="GBK"/>
+    	<property name="headlen" value="4"/>
+    </bean>
+    <bean id="http" name="http协议" class="com.lvwza.consistent.HttpSend">
+    	<property name="url" value="http://f5-ncpaygw:8090/ncpay"/>
+    	<property name="timeout" value="60000"/>
+    	<property name="encoding" value="UTF-8"/>
+    	<property name="method" value="post"/>
+    </bean>
+    <bean id="ysfhttp" name="云闪付二三类户http协议" class="com.lvwza.consistent.HttpSend">
+    	<property name="url" value="http://10.17.1.165:9111/ysfaccount"/>
+    	<property name="timeout" value="60000"/>
+    	<property name="encoding" value="UTF-8"/>
+    	<property name="method" value="post"/>
+    </bean>
+	<bean id="taxtcp" name="税银平台tcp协议" class="com.lvwza.consistent.TcpSend">
+    	<property name="ip" value="10.17.1.37"/>
+    	<property name="port" value="31031"/>
+    	<property name="timeout" value="60000"/>
+    	<property name="encoding" value="UTF-8"/>
+    	<property name="headlen" value="8"/>
+    </bean>
+    
+    <!-- 
+    	交易配置：每个bean节点为一个交易。实现类统一为com.lvwza.consistent.TranProcess
+    	测试url：http://127.0.0.1:9999/tran?id=tran_6611
+    	id 交易id，自定义。 以tran_开头
+    	name  交易的中文描述
+    	module  模块名。需要和req/目录下配置响应报文的文件夹相同。
+    	data  测试数据来源       需要在applicationContext-dataSet.xml中配置。
+    	adapter 通讯配置        在上面配置
+    	
+    	<bean id="tran_6611" name="一类户验证" class="com.lvwza.consistent.TranProcess">
+	    	<property name="module" value="ysf"/>
+	    	<property name="data" ref="ysfdata"/>
+        	<property name="adapter" ref="QPassTcp"/>
+	    </bean>
+    	
+     -->
+    <bean id="tran_6611" name="一类户验证" class="com.lvwza.consistent.TranProcess">
+	    	<property name="module" value="Qpass"/>
+	    	<property name="data" ref="QpassData"/>
+        	<property name="adapter" ref="QPassTcp"/>
+	</bean>
+    <bean id="SA002" name="申卡" class="com.lvwza.consistent.TranProcess">
+    	<property name="module" value="ysf"/>
+    	<property name="data" ref="ysfdata"/>
+        <property name="adapter" ref="ysfhttp"/>
+    </bean>
+    <bean id="SA007" name="交易结果查询" class="com.lvwza.consistent.TranProcess">
+    	<property name="module" value="ysf"/>
+    	<property name="data" ref="ysfdata"/>
+        <property name="adapter" ref="ysfhttp"/>
+    </bean>
+    <bean id="SA009" name="重置工作密钥" class="com.lvwza.consistent.TranProcess">
+    	<property name="module" value="ysf"/>
+    	<property name="data" ref="ysfdata"/>
+        <property name="adapter" ref="ysfhttp"/>
+    </bean>
+    <bean id="SA019" name="账户充值" class="com.lvwza.consistent.TranProcess">
+    	<property name="module" value="ysf"/>
+    	<property name="data" ref="ysfdata"/>
+        <property name="adapter" ref="ysfhttp"/>
+    </bean>
+    <bean id="SA020" name="账户提现" class="com.lvwza.consistent.TranProcess">
+    	<property name="module" value="ysf"/>
+    	<property name="data" ref="ysfdata"/>
+        <property name="adapter" ref="ysfhttp"/>
+    </bean>
+    <bean id="SA021" name="余额查询" class="com.lvwza.consistent.TranProcess">
+    	<property name="module" value="ysf"/>
+    	<property name="data" ref="ysfdata"/>
+        <property name="adapter" ref="ysfhttp"/>
+    </bean>
+
+	<!-- 税银平台 -->
+	<bean id="taxtest" name="连通性测试" class="com.lvwza.consistent.TranProcess">
+    	<property name="module" value="TAX"/>
+    	<property name="data" ref="taxdata"/>
+        <property name="adapter" ref="taxtcp"/>
+    </bean>
+	<bean id="TRAN_3001_0002" name="协议签约" class="com.lvwza.consistent.TranProcess">
+    	<property name="module" value="TAX"/>
+    	<property name="data" ref="taxdata"/>
+        <property name="adapter" ref="taxtcp"/>
+    </bean>
+	<bean id="TRAN_3001_0002_1" name="协议撤销" class="com.lvwza.consistent.TranProcess">
+    	<property name="module" value="TAX"/>
+    	<property name="data" ref="taxdata"/>
+        <property name="adapter" ref="taxtcp"/>
+    </bean>
+	<bean id="QueryCustInfo" name="个人参保信息查询" class="com.lvwza.consistent.TranProcess">
+    	<property name="module" value="TAX"/>
+    	<property name="data" ref="taxdata"/>
+        <property name="adapter" ref="taxtcp"/>
+    </bean>
+	<bean id="QueryFee" name="城乡居民缴费信息查询" class="com.lvwza.consistent.TranProcess">
+    	<property name="module" value="TAX"/>
+    	<property name="data" ref="taxdata"/>
+        <property name="adapter" ref="taxtcp"/>
+    </bean>
+	
+</beans>

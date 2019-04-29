@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	
+	<!-- 
+		测试数据配置：每个bean为一个测试数据集，可以配置多个测试数据集。实现类统一使用com.lvwza.consistent.DataSet
+		id  测试数据集的唯一id，在applicationContext-tran.xml中配置交易时使用该id
+		key 字段key  在配置的请求报文中可以是使用${key}来使用。比如请求报文中配置了${CUST_NO},则发送该报文时，会替换为数据集中对应的value值。
+		value 字段值
+		retdataPath用来配置获取响应报文的中的某个字段。使用场景为在第二个交易需要前一个交易的返回值时使用。value配置使用|分割，前面为报文类型。后面为路径。现在只实现了xml。 
+		如果能在retdataPath中获取数据，则使用该数据。否则使用dataMap中的数据。
+		<bean id="ysfdata" name="云闪付测试数据" class="com.lvwza.consistent.DataSet">
+	    	<property name="dataMap">
+	            <map>
+	                <entry key="CUST_NO" value="6225880298428211"></entry>
+	                <entry key="CUST_NAME" value="哈哈"></entry>
+	                <entry key="PASSWORD" value="00000000"></entry>
+	            </map>
+	        </property>
+	        <property name="retdataPath">
+            <map>
+                <entry key="RYBM" value="xml|/service/body/data[@name=RYBM]/field"></entry>
+            </map>
+        </property>
+	    </bean>
+	 -->	
+    <bean id="QpassData" class="com.lvwza.consistent.DataSet">
+    	<property name="dataMap">
+            <map>
+                <entry key="PASSWORD" value="000000"></entry> 
+            </map>
+        </property>
+    </bean>
+    
+    <bean id="ysfdata" name="云闪付测试数据" class="com.lvwza.consistent.DataSet">
+    	<property name="dataMap">
+            <map>
+                <entry key="CARD_NO" value="6231790135101753138"></entry>
+                <entry key="CUST_NAME" value="陈静静"></entry>
+                <entry key="CERT_NO" value="14010119910101027X"></entry>
+                <entry key="PHONE_NO" value="18709257205"></entry>
+                <entry key="ORI_QUERY_ID" value="Ylj1H28FSPPcpGihiksp"></entry>
+                <entry key="ORI_QUERY_TYPE" value="SA002"></entry>
+                <entry key="SUB_ACCT_NO" value="6231791735100007813"></entry>
+            </map>
+        </property>
+    </bean>
+	<bean id="taxdata" name="税银平台测试数据" class="com.lvwza.consistent.DataSet">
+    	<property name="dataMap">
+            <map>
+                <entry key="BASE_ACCT_NO" value="35114810000036068"></entry>
+                <entry key="CUST_NAME" value="高俊兰"></entry>
+                <entry key="CERT_NO" value="14062119700724054X"></entry>
+				<entry key="RYBM" value="1406033017111388"></entry>
+            </map>
+        </property>
+		<property name="retdataPath">
+            <map>
+                <entry key="RYBM" value="xml|/service/body/data[@name='CBDJ_ARRAY']/array/struct[1]/data[@name='RYBM']/field"></entry>
+            </map>
+        </property>
+    </bean>
+    
+</beans>

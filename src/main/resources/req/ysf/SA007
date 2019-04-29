@@ -1,0 +1,1 @@
+{"version": "1.0","txnType": "SA007","sendInsCode": "00010000","encryptData":"","queryId": "random(20)","cerVer": "00","signature":"","cerFile":"","origQryId":"${ORI_QUERY_ID}","origTxnType":"${ORI_QUERY_TYPE}"}

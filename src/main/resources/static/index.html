@@ -1,0 +1,18 @@
+<head>
+    <title>index.jsp</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  </head>
+  
+  <body>
+    <form action="/tran" method="get">
+      <p>交易码输入需要发起的交易的tranid</p>
+      <p>场景码输入需要发起的场景，一般为模块名。一次发起该场景下的所有交易</p>
+      <p>交易码和场景码只需输入一个</p>
+      <label>交易码:  </label><input type="text" name="id"/><br>
+      <input type="submit" value="提交"/><br>
+    </form>
+    <form action="/case" method="get">
+      <label>场景码:  </label><input type="text" name="caseid"/><br>
+      <input type="submit" value="提交"/><br>
+    </form>
+  </body>
